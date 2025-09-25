@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>امتحان الكيمياء | المستوى المتقدم</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #0c0c2c;
+            --primary-glow: #00aaff;
+            --secondary-glow: #ff00ff;
+            --text-color: #f0f0f0;
+            --surface-color: rgba(10, 10, 30, 0.7);
+            --border-color: rgba(0, 170, 255, 0.3);
+            --correct-color: #00ffab;
+            --incorrect-color: #ff4d6d;
+            --border-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- AI Nebula Animated Background --- */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200vmax;
+            height: 200vmax;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 40%);
+            border-radius: 50%;
+            transform-origin: center;
+            animation: rotate 40s linear infinite;
+            z-index: -2;
+            opacity: 0.15;
+        }
+
+        body::after {
+            background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 40%);
+            animation: rotate 40s linear infinite reverse;
+            animation-delay: -20s;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        /* --- End of Background --- */
+
+        .quiz-container {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 50px rgba(0, 170, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            width: 100%;
+            max-width: 900px;
+            padding: 40px;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .quiz-header h1 {
+            color: var(--text-color);
+            text-shadow: 0 0 10px var(--primary-glow);
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        #student-info {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 35px;
+        }
+
+        #student-info label {
+            display: block;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--primary-glow);
+        }
+
+        #student-name {
+            display: block;
+            width: 80%;
+            margin: 0 auto;
+            padding: 15px;
+            font-size: 1.1em;
+            background-color: rgba(12, 12, 44, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        #student-name:focus {
+            outline: none;
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        
+        #questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        .question-block {
+            padding: 25px;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-glow);
+            transition: transform 0.3s;
+        }
+        
+        .question-block:hover {
+            transform: scale(1.01);
+        }
+
+        .question-block img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .options li {
+            background-color: rgba(12, 12, 44, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .options li:hover {
+            background-color: rgba(0, 170, 255, 0.3);
+        }
+
+        .options li label {
+            display: block;
+            padding: 15px;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .options li.selected {
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            border-color: var(--secondary-glow);
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .options li input[type="radio"] {
+            display: none;
+        }
+
+        #submit-btn {
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 35px;
+            width: 100%;
+        }
+
+        #submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 0, 255, 0.4);
+        }
+
+        #results {
+            display: none;
+            text-align: center;
+        }
+        
+        #results h2 {
+            font-size: 2.5em;
+            text-shadow: 0 0 10px var(--secondary-glow);
+            margin-bottom: 20px;
+        }
+
+        #score {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        #feedback {
+            font-size: 1.5em;
+            font-weight: 600;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .review-question {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: right;
+        }
+
+        .review-question.correct {
+            background-color: rgba(0, 255, 171, 0.1);
+            border: 1px solid var(--correct-color);
+        }
+
+        .review-question.incorrect {
+            background-color: rgba(255, 77, 109, 0.1);
+            border: 1px solid var(--incorrect-color);
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            border-right: 3px solid var(--primary-glow);
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>امتحان مفاجئ: المول وحجم الغاز</h1>
+        </div>
+
+        <div id="quiz-content">
+            <div id="student-info">
+                <label for="student-name">الرجاء إدخال اسمك الكامل</label>
+                <input type="text" id="student-name" placeholder="الاسم يكتب هنا...">
+            </div>
+            
+            <div id="questions-container">
+                </div>
+            
+            <button id="submit-btn">تسليم الامتحان</button>
+        </div>
+
+        <div id="results">
+            </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "1. ما كتلة 0.25 مول من كربونات الكالسيوم (CaCO₃)؟ (Ca=40, C=12, O=16)", options: ["400 جم", "100 جم", "50 جم", "25 جم"], answer: "25 جم", explanation: "الكتلة المولية لـ CaCO₃ = 40 + 12 + (3×16) = 100 جم/مول. الكتلة = 0.25 مول × 100 جم/مول = 25 جم." },
+            { question: "2. عدد جزيئات 11 جرامًا من ثاني أكسيد الكربون (CO₂) يساوي... (C=12, O=16)", options: ["نصف عدد أفوجادرو", "ربع عدد أفوجادرو", "عدد أفوجادرو", "ضعف عدد أفوجادرو"], answer: "ربع عدد أفوجادرو", explanation: "الكتلة المولية لـ CO₂ = 12 + (2×16) = 44 جم/مول. عدد المولات = 11 جم / 44 جم/مول = 0.25 مول. عدد الجزيئات = 0.25 × Nₐ." },
+            { question: "3. حجم 8 جرام من غاز الميثان (CH₄) في الظروف القياسية (STP) هو... (C=12, H=1)", options: ["22.4 لتر", "11.2 لتر", "5.6 لتر", "44.8 لتر"], answer: "11.2 لتر", explanation: "الكتلة المولية لـ CH₄ = 12 + (4×1) = 16 جم/مول. عدد المولات = 8 جم / 16 جم/مول = 0.5 مول. الحجم = 0.5 مول × 22.4 لتر/مول = 11.2 لتر." },
+            { question: "4. عينة من مركب مجهول كتلتها 30 جم تحتوي على 0.5 مول. ما هي الكتلة المولية لهذا المركب؟", options: ["15 جم/مول", "30 جم/مول", "60 جم/مول", "90 جم/مول"], answer: "60 جم/مول", explanation: "الكتلة المولية = الكتلة / عدد المولات = 30 جم / 0.5 مول = 60 جم/مول." },
+            { question: "5. ما عدد الذرات الكلي في 90 جرامًا من الماء (H₂O)؟ (H=1, O=16)", options: ["5 × Nₐ", "10 × Nₐ", "15 × Nₐ", "3 × Nₐ"], answer: "15 × Nₐ", explanation: "عدد مولات الماء = 90 جم / 18 جم/مول = 5 مول. عدد الجزيئات = 5 × Nₐ. كل جزيء ماء به 3 ذرات. عدد الذرات الكلي = 3 × 5 × Nₐ = 15 × Nₐ." },
+            { question: "6. ما كتلة 33.6 لتر من غاز أول أكسيد النيتروجين (NO) في الظروف القياسية (STP)؟ (N=14, O=16)", options: ["30 جم", "45 جم", "60 جم", "90 جم"], answer: "45 جم", explanation: "عدد المولات = 33.6 لتر / 22.4 لتر/مول = 1.5 مول. الكتلة المولية لـ NO = 30 جم/مول. الكتلة = 1.5 مول × 30 جم/مول = 45 جم." },
+            { question: "7. أيهما يحتوي على عدد أكبر من الذرات؟", options: ["1 مول من الأكسجين (O₂)", "1 مول من الأوزون (O₃)", "كلاهما متساوي", "لا يمكن التحديد"], answer: "1 مول من الأوزون (O₃)", explanation: "1 مول من O₂ يحتوي على 2 × Nₐ ذرة. 1 مول من O₃ يحتوي على 3 × Nₐ ذرة." },
+            { question: "8. عدد المولات في 3.011 × 10²³ جزيء من غاز الكلور (Cl₂) هو...", options: ["1 مول", "2 مول", "0.25 مول", "0.5 مول"], answer: "0.5 مول", explanation: "عدد المولات = عدد الجزيئات / عدد أفوجادرو = (3.011 × 10²³) / (6.022 × 10²³) = 0.5 مول." },
+            { question: "9. بالون حجمه 5.6 لتر في الظروف القياسية (STP) يحتوي على غاز مجهول كتلته 11 جم. ما الكتلة المولية للغاز؟", options: ["22 جم/مول", "33 جم/مول", "44 جم/مول", "55 جم/مول"], answer: "44 جم/مول", explanation: "عدد المولات = 5.6 لتر / 22.4 لتر/مول = 0.25 مول. الكتلة المولية = 11 جم / 0.25 مول = 44 جم/مول." },
+            { question: "10. ما كتلة جزيء واحد من الماء (H₂O) بالجرام؟ (H=1, O=16)", options: ["18 جم", "18 / Nₐ", "Nₐ / 18", "18 × Nₐ"], answer: "18 / Nₐ", explanation: "كتلة المول الواحد (Nₐ جزيء) هي 18 جم. إذن كتلة الجزيء الواحد = 18 جم / Nₐ." },
+            { question: "11. عدد أيونات الصوديوم (Na⁺) في 71 جرامًا من كبريتات الصوديوم (Na₂SO₄) هو... (Na=23, S=32, O=16)", options: ["0.5 × Nₐ", "1 × Nₐ", "2 × Nₐ", "4 × Nₐ"], answer: "1 × Nₐ", explanation: "الكتلة المولية لـ Na₂SO₄ = 142 جم/مول. عدد المولات = 71 جم / 142 جم/مول = 0.5 مول. كل مول من المركب به 2 مول من أيونات الصوديوم. عدد مولات Na⁺ = 0.5 × 2 = 1 مول. عدد الأيونات = 1 × Nₐ." },
+            { question: "12. إذا كانت كثافة غاز ما في الظروف القياسية (STP) هي 2 جم/لتر، فإن كتلته المولية هي:", options: ["22.4 جم/مول", "11.2 جم/مول", "44.8 جم/مول", "2 جم/مول"], answer: "44.8 جم/مول", explanation: "الكتلة المولية = الكثافة × الحجم المولي = 2 جم/لتر × 22.4 لتر/مول = 44.8 جم/مول." },
+            { question: "13. أيهما يشغل حجمًا أكبر في الظروف القياسية (STP)؟", options: ["4 جرام من الهيليوم (He=4)", "28 جرامًا من النيتروجين (N₂=28)", "كلاهما متساوي", "لا يمكن التحديد"], answer: "كلاهما متساوي", explanation: "4 جم من الهيليوم = 1 مول (حجمه 22.4 لتر). 28 جم من النيتروجين = 1 مول (حجمه 22.4 لتر)." },
+            { question: "14. عدد الذرات في 11.2 لتر من غاز الأرجون (Ar) في الظروف القياسية (STP) هو:", options: ["Nₐ", "0.5 × Nₐ", "2 × Nₐ", "0.25 × Nₐ"], answer: "0.5 × Nₐ", explanation: "عدد المولات = 11.2 لتر / 22.4 لتر/مول = 0.5 مول. الأرجون غاز خامل (ذرة واحدة). عدد الذرات = 0.5 × Nₐ." },
+            { question: "15. ما عدد مولات 1.505 × 10²⁴ ذرة من الحديد (Fe)؟", options: ["1.5 مول", "2 مول", "2.5 مول", "3 مول"], answer: "2.5 مول", explanation: "عدد المولات = (1.505 × 10²⁴) / (6.022 × 10²³) ≈ 2.5 مول." },
+            { question: "16. كم جرامًا من الأكسجين (O₂) تشغل حجمًا قدره 5.6 لتر في الظروف القياسية (STP)؟ (O=16)", options: ["4 جم", "8 جم", "16 جم", "32 جم"], answer: "8 جم", explanation: "عدد مولات O₂ = 5.6 لتر / 22.4 لتر/مول = 0.25 مول. الكتلة = 0.25 مول × 32 جم/مول = 8 جم." },
+            { question: "17. عدد الجزيئات في عينة من غاز حجمها 2.24 لتر في الظروف القياسية (STP) هو:", options: ["0.1 × Nₐ", "0.2 × Nₐ", "1 × Nₐ", "2 × Nₐ"], answer: "0.1 × Nₐ", explanation: "عدد المولات = 2.24 لتر / 22.4 لتر/مول = 0.1 مول. عدد الجزيئات = 0.1 × Nₐ." },
+            { question: "18. ما عدد مولات أيونات البوتاسيوم (K⁺) الموجودة في 202 جرام من نترات البوتاسيوم (KNO₃)؟ (K=39, N=14, O=16)", options: ["1 مول", "2 مول", "3 مول", "4 مول"], answer: "2 مول", explanation: "الكتلة المولية لـ KNO₃ = 101 جم/مول. عدد مولات المركب = 202 جم / 101 جم/مول = 2 مول. كل مول من المركب به 1 مول من أيونات البوتاسيوم. إذن عدد مولات K⁺ = 2 مول." },
+            { question: "19. حجم 6.022 × 10²² جزيء من غاز ثاني أكسيد الكبريت (SO₂) في الظروف القياسية (STP) هو:", options: ["22.4 لتر", "11.2 لتر", "2.24 لتر", "4.48 لتر"], answer: "2.24 لتر", explanation: "عدد المولات = (6.022 × 10²²) / (6.022 × 10²³) = 0.1 مول. الحجم = 0.1 مول × 22.4 لتر/مول = 2.24 لتر." },
+            { question: "20. إذا علمت أن الكتلة المولية لغاز ما هي 71 جم/مول، فما كتلة 11.2 لتر منه في الظروف القياسية (STP)؟", options: ["71 جم", "142 جم", "35.5 جم", "17.75 جم"], answer: "35.5 جم", explanation: "عدد المولات = 11.2 لتر / 22.4 لتر/مول = 0.5 مول. الكتلة = 0.5 مول × 71 جم/مول = 35.5 جم." }
+        ];
+
+        const quizContent = document.getElementById('quiz-content');
+        const resultsDiv = document.getElementById('results');
+        const studentNameInput = document.getElementById('student-name');
+        const questionsContainer = document.getElementById('questions-container');
+        const submitBtn = document.getElementById('submit-btn');
+
+        function buildQuiz() {
+            let allQuestionsHTML = ''; 
+            
+            quizData.forEach((current, index) => {
+                const optionsHTML = current.options.map((option, optIndex) => `
+                    <li>
+                        <input type="radio" name="question${index}" id="q${index}o${optIndex}" value="${option}">
+                        <label for="q${index}o${optIndex}">${option}</label>
+                    </li>
+                `).join('');
+
+                allQuestionsHTML += `
+                    <div class="question-block">
+                        <img src="https://image.pollinations.ai/prompt/Digital%20Illustration,%20Cinematic,%20Epic%20High-Fantasy,%20Bold%20and%20dramatic%20lighting%20with%20strong%20contrasts,%20Rich%20but%20focused%20colors%20with%20deep%20reds,%20oranges,%20and%20dark%20moody%20tones,%20Sharp%20and%20intentional%20lines,%20distinctive%202D%20art%20style,%20A%20blend%20of%20mythic%20storytelling%20and%20modern%20concept%20art,%20reminiscent%20of%20high-end%20animated%20films%20or%20fantasy%20video%20games%20of%20chemical%20elements%20related%20to%20question%20${index+1}?width=900&height=250&seed=${index+100}" alt="صورة توضيحية للسؤال ${index+1}">
+                        <p class="question-text">${current.question}</p>
+                        <ul class="options">${optionsHTML}</ul>
+                    </div>
+                `;
+            });
+
+            questionsContainer.innerHTML = allQuestionsHTML;
+
+            document.querySelectorAll('.options li').forEach(item => {
+                item.addEventListener('click', event => {
+                    const li = event.currentTarget;
+                    const radio = li.querySelector('input[type="radio"]');
+                    if (radio) radio.checked = true;
+                    
+                    const parentUl = li.parentNode;
+                    parentUl.querySelectorAll('li').forEach(sibling => sibling.classList.remove('selected'));
+                    li.classList.add('selected');
+                });
+            });
+        }
+
+        function showResults() {
+            const studentName = studentNameInput.value.trim();
+            if (studentName === "") {
+                studentNameInput.style.borderColor = 'var(--incorrect-color)';
+                studentNameInput.focus();
+                alert("من فضلك أدخل اسمك قبل تسليم الامتحان.");
+                return;
+            } else {
+                 studentNameInput.style.borderColor = 'var(--border-color)';
+            }
+
+            let score = 0;
+            const studentAnswers = [];
+            quizData.forEach((current, index) => {
+                const selector = `input[name="question${index}"]:checked`;
+                const userAnswerNode = questionsContainer.querySelector(selector);
+                const userAnswer = userAnswerNode ? userAnswerNode.value : undefined;
+                studentAnswers.push(userAnswer);
+
+                if (userAnswer === current.answer) {
+                    score += 2;
+                }
+            });
+
+            const totalScore = 40;
+            const percentage = (score / totalScore) * 100;
+            
+            let feedbackText = '';
+            let feedbackColor = '';
+             if (percentage < 50) {
+                feedbackText = 'سقط يا موكوس 😞'; feedbackColor = 'var(--incorrect-color)';
+            } else if (percentage < 60) {
+                feedbackText = 'على الحركرك يا موكوس 😬'; feedbackColor = '#f39c12';
+            } else if (percentage < 70) {
+                feedbackText = 'عاش بس لسه فاشل 😏'; feedbackColor = '#3498db';
+            } else if (percentage < 80) {
+                feedbackText = 'مش محتاجه كلام، كويس 👍'; feedbackColor = '#27ae60';
+            } else if (percentage < 90) {
+                feedbackText = 'عادي معملتش معجزة كبيرة 😉'; feedbackColor = '#8e44ad';
+            } else if (percentage < 100) {
+                feedbackText = 'هات بوسة 😘'; feedbackColor = '#e83e8c';
+            } else {
+                feedbackText = 'عاش جدا انت صاحبي الحقيقي 😂😂'; feedbackColor = 'var(--correct-color)';
+            }
+            
+            resultsDiv.innerHTML = `
+                <h2 id="result-title">النتيجة النهائية للطالب: ${studentName}</h2>
+                <p id="score">الدرجة: ${score} من ${totalScore}</p>
+                <p id="feedback" style="background-color: ${feedbackColor};">${feedbackText}</p>
+                <div id="answers-review"><h3>مراجعة تفصيلية للإجابات:</h3></div>
+            `;
+            
+            const reviewContainer = resultsDiv.querySelector('#answers-review');
+            quizData.forEach((current, index) => {
+                const isCorrect = studentAnswers[index] === current.answer;
+                const yourAnswer = studentAnswers[index] || "<em>لم تجب على هذا السؤال</em>";
+                const reviewBlock = document.createElement('div');
+                reviewBlock.className = `review-question ${isCorrect ? 'correct' : 'incorrect'}`;
+                reviewBlock.innerHTML = `
+                    <p><strong>السؤال ${index + 1}:</strong> ${current.question}</p>
+                    <p><strong>إجابتك:</strong> ${yourAnswer}</p>
+                    ${!isCorrect ? `<p><strong>الإجابة الصحيحة:</strong> ${current.answer}</p>` : ''}
+                    <div class="explanation"><strong>الشرح:</strong> ${current.explanation}</div>
+                `;
+                reviewContainer.appendChild(reviewBlock);
+            });
+
+            quizContent.style.display = 'none';
+            resultsDiv.style.display = 'block';
+        }
+        
+        // --- Start the Quiz ---
+        document.addEventListener('DOMContentLoaded', () => {
+            buildQuiz();
+            submitBtn.addEventListener('click', showResults);
+        });
+
+    </script>
+</body>
+</html>
