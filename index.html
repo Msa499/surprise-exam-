@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الامتحان الشامل | الإصدار النهائي</title>
+    <title>امتحان: حضارات اليمن القديم</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --dark-bg: #0c0c2c;
-            --primary-glow: #00aaff;
-            --secondary-glow: #ff00ff;
-            --text-color: #f0f0f0;
-            --surface-color: rgba(10, 10, 30, 0.75);
-            --border-color: rgba(0, 170, 255, 0.3);
-            --correct-color: #00ffab;
-            --incorrect-color: #ff4d6d;
+            --dark-bg: #010409;
+            --primary-glow: #00e5ff; /* Cyan */
+            --secondary-glow: #ffffff; /* White */
+            --text-color: #e6edf3;
+            --surface-color: rgba(13, 17, 23, 0.8);
+            --border-color: rgba(0, 229, 255, 0.2);
+            --correct-color: #238636;
+            --incorrect-color: #da3633;
             --border-radius: 16px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,26 +29,23 @@
             align-items: flex-start;
             min-height: 100vh;
             padding: 40px 20px;
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
         }
-        body::before, body::after {
-            content: ''; position: fixed; top: 50%; left: 50%; width: 200vmax; height: 200vmax;
-            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 40%);
-            border-radius: 50%; transform-origin: center; animation: rotate 40s linear infinite;
-            z-index: -2; opacity: 0.15;
+        /* --- New AI Matrix Background --- */
+        #background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
-        body::after {
-            background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 40%);
-            animation: rotate 40s linear infinite reverse; animation-delay: -20s;
-        }
-        @keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-        
         .quiz-container {
             background: var(--surface-color); border: 1px solid var(--border-color);
-            border-radius: var(--border-radius); box-shadow: 0 0 50px rgba(0, 170, 255, 0.2);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            width: 100%; max-width: 950px; padding: 40px;
+            border-radius: var(--border-radius); box-shadow: 0 0 60px rgba(0, 229, 255, 0.15);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            width: 100%; max-width: 950px; padding: 40px; z-index: 1;
         }
         #block-screen { text-align: center; padding: 80px 40px; }
         #block-screen h1 { font-size: 2.5em; color: var(--incorrect-color); text-shadow: 0 0 10px var(--incorrect-color); margin-bottom: 20px; }
@@ -56,77 +53,76 @@
         .quiz-header { text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid var(--border-color); }
         .quiz-header h1 { color: var(--text-color); text-shadow: 0 0 10px var(--primary-glow); font-size: 2.5em; font-weight: 700; }
         #timer {
-            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); color: white;
-            padding: 15px; border-radius: 12px; font-size: 1.8em; font-weight: 700;
-            text-align: center; margin-bottom: 30px; box-shadow: 0 0 20px var(--secondary-glow);
-            letter-spacing: 3px;
+            background-color: rgba(0, 229, 255, 0.1); border: 1px solid var(--border-color);
+            color: var(--primary-glow); padding: 15px; border-radius: 12px; font-size: 1.8em; font-weight: 700;
+            text-align: center; margin-bottom: 30px; box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            letter-spacing: 3px; text-shadow: 0 0 8px var(--primary-glow);
         }
         #student-info { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 25px; }
         #student-info label { display: block; text-align: center; font-weight: 600; font-size: 1.3em; margin-bottom: 15px; color: var(--primary-glow); }
-        #student-name { display: block; width: 80%; margin: 0 auto; padding: 15px; font-size: 1.1em; background-color: rgba(12, 12, 44, 0.8); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); text-align: center; transition: all 0.3s ease; }
+        #student-name { display: block; width: 80%; margin: 0 auto; padding: 15px; font-size: 1.1em; background-color: rgba(1, 4, 9, 0.8); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); text-align: center; transition: all 0.3s ease; }
         #student-name:focus { outline: none; border-color: var(--primary-glow); box-shadow: 0 0 15px var(--primary-glow); }
         
         #start-btn, #submit-btn {
-            padding: 20px; font-size: 1.5em; font-weight: 700; color: #fff;
-            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            padding: 20px; font-size: 1.5em; font-weight: 700; color: #010409;
+            background: var(--primary-glow);
             border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s ease;
             width: 100%;
         }
         #start-btn { margin-top: 10px; }
         #submit-btn { margin-top: 35px; }
-        #start-btn:hover, #submit-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 0, 255, 0.4); }
+        #start-btn:hover, #submit-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 229, 255, 0.3); }
         
         #questions-container { display: flex; flex-direction: column; gap: 35px; }
         .question-block { padding: 25px; background-color: rgba(0,0,0,0.2); border-radius: var(--border-radius); border-left: 5px solid var(--primary-glow); }
-        .question-block .subject-tag { display: inline-block; background: var(--secondary-glow); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; font-weight: bold; margin-bottom: 15px; }
-        .question-block img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; opacity: 0.9; }
+        .question-block .level-tag { display: inline-block; background: rgba(0, 229, 255, 0.15); color: var(--primary-glow); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; font-weight: bold; margin-bottom: 15px; }
         .question-text { font-size: 1.2em; font-weight: 600; margin-bottom: 20px; line-height: 1.7; }
         .options { list-style: none; display: grid; grid-template-columns: 1fr; gap: 15px; }
         @media (min-width: 768px) { .options { grid-template-columns: 1fr 1fr; } }
-        .options li { background-color: rgba(12, 12, 44, 0.7); border: 1px solid var(--border-color); border-radius: 10px; transition: all 0.2s ease-in-out; }
-        .options li:hover { background-color: rgba(0, 170, 255, 0.3); }
+        .options li { background-color: rgba(1, 4, 9, 0.7); border: 1px solid var(--border-color); border-radius: 10px; transition: all 0.2s ease-in-out; }
+        .options li:hover { background-color: rgba(0, 229, 255, 0.1); border-color: var(--primary-glow); }
         .options li label { display: block; padding: 15px; cursor: pointer; width: 100%; height: 100%; }
-        .options li.selected { background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border-color: var(--secondary-glow); color: #fff; font-weight: bold; }
+        .options li.selected { background: var(--primary-glow); border-color: var(--primary-glow); color: #010409; font-weight: bold; }
         .options li input[type="radio"] { display: none; }
         
         #results { text-align: center; }
-        #results h2 { font-size: 2.5em; text-shadow: 0 0 10px var(--secondary-glow); margin-bottom: 20px; }
+        #results h2 { font-size: 2.5em; text-shadow: 0 0 10px var(--primary-glow); margin-bottom: 20px; }
         #results p { font-size: 1.8em; font-weight: bold; color: var(--text-color); margin-bottom: 20px; }
         .review-question { margin-bottom: 20px; padding: 20px; border-radius: 12px; text-align: right; }
-        .review-question.correct { background-color: rgba(0, 255, 171, 0.1); border: 1px solid var(--correct-color); }
-        .review-question.incorrect { background-color: rgba(255, 77, 109, 0.1); border: 1px solid var(--incorrect-color); }
+        .review-question.correct { background-color: rgba(35, 134, 54, 0.1); border: 1px solid var(--correct-color); }
+        .review-question.incorrect { background-color: rgba(218, 54, 51, 0.1); border: 1px solid var(--incorrect-color); }
         .explanation { margin-top: 15px; padding: 15px; background-color: rgba(0,0,0,0.3); border-radius: 10px; border-right: 3px solid var(--primary-glow); font-size: 0.95em; }
 
         /* Chatbot Styles */
         #chatbot-toggle {
-            position: fixed; bottom: 30px; right: 30px;
-            width: 60px; height: 60px; background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
-            color: white; border-radius: 50%; border: none; font-size: 28px;
-            cursor: pointer; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 5px 15px rgba(255,0,255,0.5); z-index: 1000; transition: transform 0.3s;
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+            background: var(--primary-glow); color: var(--dark-bg);
+            border-radius: 50%; border: none; font-size: 28px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 229, 255, 0.4); z-index: 1000; transition: transform 0.3s;
         }
         #chatbot-toggle:hover { transform: scale(1.1); }
         #chatbot-window {
-            position: fixed; bottom: 100px; right: 30px;
-            width: 350px; height: 500px; background: var(--surface-color);
-            border: 1px solid var(--border-color); border-radius: var(--border-radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: none;
-            flex-direction: column; z-index: 999;
+            position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px;
+            background: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--border-radius); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none; flex-direction: column; z-index: 999;
         }
         .chatbot-header { padding: 15px; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .chatbot-header h3 { margin: 0; text-shadow: 0 0 5px var(--secondary-glow); }
+        .chatbot-header h3 { margin: 0; text-shadow: 0 0 5px var(--primary-glow); }
         #chatbot-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
         #chatbot-messages { flex-grow: 1; padding: 15px; overflow-y: auto; }
         .chat-message { max-width: 80%; margin-bottom: 12px; padding: 10px 15px; border-radius: 12px; line-height: 1.5; }
-        .user-message { background-color: var(--primary-glow); color: white; margin-left: auto; border-bottom-right-radius: 0; }
+        .user-message { background-color: var(--primary-glow); color: var(--dark-bg); margin-left: auto; border-bottom-right-radius: 0; }
         .bot-message { background-color: #333; margin-right: auto; border-bottom-left-radius: 0; }
         .bot-message.error { background-color: var(--incorrect-color); font-weight: bold; }
         #chatbot-input { padding: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; }
-        #chatbot-input textarea { flex-grow: 1; resize: none; background: rgba(12, 12, 44, 0.8); border: 1px solid var(--border-color); border-radius: 8px; color: white; padding: 10px; font-family: inherit; }
-        #chatbot-send { background: var(--primary-glow); border: none; border-radius: 8px; color: white; padding: 0 15px; font-weight: bold; cursor: pointer; }
+        #chatbot-input textarea { flex-grow: 1; resize: none; background: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 8px; color: white; padding: 10px; font-family: inherit; }
+        #chatbot-send { background: var(--primary-glow); border: none; border-radius: 8px; color: var(--dark-bg); padding: 0 15px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
+    <canvas id="background-animation"></canvas>
 
     <div class="quiz-container">
         <div id="block-screen" style="display: none;">
@@ -135,8 +131,8 @@
         </div>
 
         <div id="quiz-main">
-            <div class="quiz-header"><h1>الامتحان الشامل</h1></div>
-            
+            <div
+                class="quiz-header"><h1>امتحان: حضارات اليمن القديم</h1></div>
             <div id="quiz-setup">
                 <div id="student-info">
                     <label for="student-name">الرجاء إدخال اسمك الكامل</label>
@@ -144,13 +140,11 @@
                 </div>
                 <button id="start-btn">ابدأ الامتحان</button>
             </div>
-
             <div id="quiz-live-content" style="display: none;">
-                <div id="timer">04:00:00</div>
+                <div id="timer">00:45:00</div>
                 <div id="questions-container"></div>
                 <button id="submit-btn">تسليم الامتحان</button>
             </div>
-
             <div id="results" style="display:none;"></div>
         </div>
     </div>
@@ -162,7 +156,7 @@
             <button id="chatbot-close">&times;</button>
         </div>
         <div id="chatbot-messages">
-            <div class="chat-message bot-message">أهلاً بك! أنا موكوس. يمكنك أن تسألني 5 أسئلة فقط من الامتحان. الصق السؤال هنا وسأساعدك.</div>
+            <div class="chat-message bot-message">أهلاً بك! أنا موكوس. يمكنك أن تسألني 3 أسئلة فقط من الامتحان. الصق السؤال هنا وسأساعدك.</div>
         </div>
         <div id="chatbot-input">
             <textarea id="user-input" placeholder="الصق السؤال هنا..."></textarea>
@@ -171,68 +165,41 @@
     </div>
 
     <script>
-        const EXAM_TOKEN = 'EXAM_ATTEMPTED_TOKEN_COMPREHENSIVE_V3';
+        const EXAM_TOKEN = 'EXAM_ATTEMPTED_YEMEN_CIV_V1';
         if (localStorage.getItem(EXAM_TOKEN)) {
             document.getElementById('quiz-main').style.display = 'none';
             document.getElementById('block-screen').style.display = 'block';
         }
 
         const fullQuizData = [
-            // All 50 questions with answers and explanations go here...
-            // This is just a sample for brevity, the full array is included in the actual code.
-            // الكيمياء - 10
-            { subject: 'كيمياء', question: "1. في التفاعل التالي: 2H_2S_{(g)} + 3O_{2(g)} \\rightarrow 2SO_{2(g)} + 2H_2O_{(l)}\nعند تفاعل 17 جرامًا من غاز كبريتيد الهيدروجين (H_2S) مع كمية وافرة من الأكسجين، ما حجم غاز ثاني أكسيد الكبريت (SO_2) الناتج في الظروف القياسية (STP)؟ (الكتل الذرية: H=1, S=32)", options: ["22.4 لتر", "11.2 لتر", "5.6 لتر", "44.8 لتر"], answer: "11.2 لتر", explanation: "الكتلة المولية لـ H₂S هي 34 جم/مول. عدد مولات H₂S = 17 جم / 34 جم/مول = 0.5 مول. من المعادلة، نسبة H₂S إلى SO₂ هي 1:1. إذًا، عدد مولات SO₂ الناتجة = 0.5 مول. حجم غاز SO₂ = 0.5 × 22.4 = 11.2 لتر." },
-            { subject: 'كيمياء', question: "2. كم عدد ذرات الأكسجين الموجودة في 5.6 لتر من غاز الأوزون (O_3) في الظروف القياسية (STP)؟", options: ["0.25 \\times N_A", "0.5 \\times N_A", "0.75 \\times N_A", "3 \\times N_A"], answer: "0.75 \\times N_A", explanation: "عدد مولات O₃ = 5.6 / 22.4 = 0.25 مول. عدد جزيئات O₃ = 0.25 × N_A. كل جزيء به 3 ذرات أكسجين. إذن، عدد الذرات = 3 × (0.25 × N_A) = 0.75 × N_A." },
-            { subject: 'كيمياء', question: "3. إذا كانت كثافة غاز مجهول في الظروف القياسية (STP) هي 1.96 جم/لتر، فما الصيغة الكيميائية المحتملة لهذا الغاز؟ (C=12, O=16, N=14, S=32)", options: ["CO", "NO_2", "SO_2", "CO_2"], answer: "CO_2", explanation: "الكتلة المولية = الكثافة × 22.4 = 1.96 × 22.4 ≈ 44 جم/مول. الكتلة المولية لـ CO₂ هي 44 جم/مول." },
-            { subject: 'كيمياء', question: "4. عند خلط 10 لتر من غاز النيتروجين (N_2) مع 15 لتر من غاز الهيدروجين (H_2) للتفاعل حسب المعادلة: N_{2(g)} + 3H_{2(g)} \\rightarrow 2NH_{3(g)}. ما الحجم الكلي للغازات المتبقية في وعاء التفاعل بعد انتهاء التفاعل؟", options: ["10 لتر", "25 لتر", "15 لتر", "5 لتر"], answer: "15 لتر", explanation: "15 لتر H₂ تحتاج 5 لتر N₂. يتبقى 5 لتر N₂. ينتج 10 لتر NH₃. الحجم الكلي = 5 لتر N₂ المتبقي + 10 لتر NH₃ الناتج = 15 لتر." },
-            { subject: 'كيمياء', question: "5. ما كتلة عينة من غاز الأمونيا (NH_3) تشغل نفس حجم 8 جرام من غاز الميثان (CH_4) في نفس الظروف من الضغط ودرجة الحرارة؟ (N=14, H=1, C=12)", options: ["8.5 جم", "17 جم", "16 جم", "8 جم"], answer: "8.5 جم", explanation: "عدد مولات CH₄ = 8 جم / 16 جم/مول = 0.5 مول. إذن عدد مولات NH₃ = 0.5 مول. كتلة NH₃ = 0.5 مول × 17 جم/مول = 8.5 جم." },
-            { subject: 'كيمياء', question: "6. تم حرق 5 لتر من غاز الإيثان (C_2H_6) في كمية وافرة من الأكسجين حسب المعادلة: 2C_2H_{6(g)} + 7O_{2(g)} \\rightarrow 4CO_{2(g)} + 6H_2O_{(v)}. ما هو مجموع حجوم الغازات الناتجة؟", options: ["10 لتر", "15 لتر", "25 لتر", "35 لتر"], answer: "25 لتر", explanation: "من 5 لتر إيثان، ينتج (5 × 4/2) = 10 لتر CO₂. وينتج (5 × 6/2) = 15 لتر H₂O. المجموع = 10 + 15 = 25 لتر." },
-            { subject: 'كيمياء', question: "7. بالون يحتوي على خليط من 4.4 جم من CO_2 و 6.4 جم من SO_2 في الظروف القياسية (STP). ما الحجم الكلي للخليط داخل البالون؟ (C=12, O=16, S=32)", options: ["2.24 لتر", "4.48 لتر", "22.4 لتر", "10.8 لتر"], answer: "4.48 لتر", explanation: "عدد مولات CO₂ = 0.1 مول. عدد مولات SO₂ = 0.1 مول. المجموع = 0.2 مول. الحجم = 0.2 × 22.4 = 4.48 لتر." },
-            { subject: 'كيمياء', question: "8. عند تسخين 50 جرامًا من عينة غير نقية من كربونات الكالسيوم (CaCO_3)، نتج 8.96 لتر من غاز ثاني أكسيد الكربون في الظروف القياسية (STP) حسب المعادلة: CaCO_{3(s)} \\rightarrow CaO_{(s)} + CO_{2(g)}. ما نسبة نقاء العينة؟ (Ca=40, C=12, O=16)", options: ["40%", "50%", "80%", "100%"], answer: "80%", explanation: "عدد مولات CO₂ = 8.96 / 22.4 = 0.4 مول. كتلة CaCO₃ النقية = 0.4 مول × 100 جم/مول = 40 جم. نسبة النقاء = (40/50) × 100 = 80%." },
-            { subject: 'كيمياء', question: "9. كم عدد ذرات الهيدروجين الموجودة في عينة من غاز الإيثان (C_2H_6) حجمها 11.2 لتر في الظروف القياسية (STP)؟", options: ["0.5 \\times N_A", "2 \\times N_A", "3 \\times N_A", "6 \\times N_A"], answer: "3 \\times N_A", explanation: "عدد مولات C₂H₆ = 11.2 / 22.4 = 0.5 مول. عدد الجزيئات = 0.5 × N_A. كل جزيء به 6 ذرات هيدروجين. عدد الذرات = 6 × (0.5 × N_A) = 3 × N_A." },
-            { subject: 'كيمياء', question: "10. وعاء مغلق يحتوي على 4 جرام من الهيدروجين (H_2) و 4 جرام من الهيليوم (He) في الظروف القياسية (STP). ما العبارة الصحيحة التي تصف محتويات الوعاء؟ (H=1, He=4)", options: ["لهما نفس الكتلة ونفس الحجم.", "حجم الهيدروجين ضعف حجم الهيليوم.", "حجم الهيليوم ضعف حجم الهيدروجين.", "لهما نفس عدد الجزيئات ونفس الحجم."], answer: "حجم الهيدروجين ضعف حجم الهيليوم.", explanation: "عدد مولات H₂ = 4جم/2جم/مول = 2 مول. عدد مولات He = 4جم/4جم/مول = 1 مول. بما أن الحجم يتناسب مع عدد المولات، فحجم الهيدروجين ضعف حجم الهيليوم." },
-            { subject: 'تاريخ', question: "1. أي من المناطق التالية جمعت بين كونها مركزًا دينيًا قائمًا على التوحيد الإبراهيمي، ونقطة ارتكاز لنشاط اقتصادي واسع أثر على السياسات النقدية في الإقليم؟", options: ["يثرب.", "مملكة حمير.", "مكة المكرمة.", "مملكة الغساسنة."], answer: "مكة المكرمة.", explanation: "لوجود الكعبة المشرفة وارتباطها بالتوحيد الإبراهيمي، وكونها مركز رحلة الشتاء والصيف التجارية." },
-            { subject: 'تاريخ', question: "2. رغم أن انهيار سد مأرب كان كارثة اقتصادية، إلا أنه أدى بشكل غير مباشر إلى ازدهار حضاري وعمراني في مناطق أخرى. أي من الممالك التالية يعتبر دليلًا معماريًا بارزًا على هذه النتيجة؟", options: ["مملكة سبأ نفسها وقصر بلقيس.", "مملكة الحيرة وقصر الخورنق.", "دولة الأنباط ومدينة الحجر المنحوتة.", "مملكة الغساسنة وقصر المشتى."], answer: "مملكة الغساسنة وقصر المشتى.", explanation: "ازدهرت بعد الهجرات من اليمن وأظهرت تأثرًا معماريًا بالرومان." },
-            { subject: 'تاريخ', question: "3. \"الحاجة أم الاختراع\". اعتمد العرب على علوم فلكية دقيقة لتسهيل حياتهم. أي من الأنشطة التالية كان سيتأثر سلبًا بشكل مباشر لو غابت هذه المعرفة الفلكية لدى عرب ما قبل الإسلام؟", options: ["تحديد أوقات الزراعة في اليمن.", "تنظيم \"رحلة الشتاء والصيف\" من مكة.", "بناء القصور والمعابد في الحيرة.", "ممارسة حرفة الرعي في البادية."], answer: "تنظيم \"رحلة الشتاء والصيف\" من مكة.", explanation: "تطلب التنقل في الصحراء معرفة بالنجوم لتحديد الاتجاهات." },
-            { subject: 'تاريخ', question: "4. كانت العلاقات السياسية في شمال شبه الجزيرة العربية مرتبطة بالقوى العظمى (الفرس والروم). في ضوء هذه الحقيقة، أي الأحداث التالية يمكن اعتباره صراعًا \"بالوكالة\" بين إمبراطوريتين عظيمتين على أرض عربية؟", options: ["حرب البسوس بين بكر وتغلب.", "حروب مملكة الحيرة ضد مملكة الغساسنة.", "حلف الفضول الذي عقدته قبائل مكة.", "حرب الفجار بين قريش وهوازن."], answer: "حروب مملكة الحيرة ضد مملكة الغساسنة.", explanation: "الحيرة كانت حليفة للفرس، والغساسنة حلفاء للروم." },
-            { subject: 'تاريخ', question: "5. أي من الشخصيات النسائية التالية كان لها تأثير سياسي وعسكري مباشر، بينما الأخرى كان تأثيرها اقتصاديًا في المقام الأول، مما يعكس تنوع أدوار المرأة في الحواضر العربية قبل الإسلام؟", options: ["الملكة بلقيس والسيدة خديجة.", "زنوبيا ملكة تدمر والملكة بلقيس.", "السيدة خديجة وهند بنت النعمان.", "الملكة بلقيس وعمة جساس بن مرة."], answer: "الملكة بلقيس والسيدة خديجة.", explanation: "بلقيس ملكة ذات سلطة سياسية، وخديجة تاجرة ذات نفوذ اقتصادي كبير." },
-            { subject: 'تاريخ', question: "6. يتضح من تحليل الخريطة أن مدينتي مكة ويثرب شكلتا أهمية اقتصادية كبرى. ما هو العامل الجغرافي المشترك الذي منحهما هذه الأهمية؟", options: ["قربهما من سواحل الخليج العربي.", "وقوعهما على طريق القوافل التجارية الرئيسي.", "تمتعهما بأراضٍ فيضية خصبة مثل العراق.", "قربهما من ممالك الشمال المتحالفة مع الروم."], answer: "وقوعهما على طريق القوافل التجارية الرئيسي.", explanation: "طريق البخور الذي يربط اليمن بالشام." },
-            { subject: 'تاريخ', question: "7. النظام شبه الملكي في شمال وجنوب شبه الجزيرة العربية تأثر سياسيًا بالفرس والروم. أي عنصر من عناصر هذا النظام يعكس بشكل واضح تطبيق مبدأ \"اللامركزية\" في إدارة الدولة؟", options: ["كبار الموظفين.", "المجلس العام.", "حكام الأقاليم (الكبير).", "الجيش وفرقه العسكرية."], answer: "حكام الأقاليم (الكبير).", explanation: "إذ يمثلون سلطة محلية تحت السلطة المركزية للملك." },
-            { subject: 'تاريخ', question: "8. بالرغم من انتشار الوثنية، وُجدت ديانات وضعية أخرى ارتبطت بعبادة الظواهر الكونية. أي من المدن التالية كانت مركزًا لهذه العبادات وارتبطت في نفس الوقت بحضارة متأثرة بالفرس والروم؟", options: ["مكة.", "يثرب.", "الرقة وحران.", "خيبر."], answer: "الرقة وحران.", explanation: "كانتا مركزًا للصابئة الذين عبدوا الكواكب والنجوم وتأثروا بالفرس والروم." },
-            { subject: 'تاريخ', question: "9. تشابهت أسباب نشأة مملكتي الحيرة والغساسنة في كونها نتيجة لهجرات قادمة من اليمن بعد انهيار سد مأرب. ولكنهما اختلفتا جذريًا في ولائهما السياسي. أي من الخيارات التالية يمثل هذا الاختلاف بشكل صحيح؟", options: ["الغساسنة (ولاء للفرس) - الحيرة (ولاء للروم).", "الغساسنة (ولاء للروم) - الحيرة (ولاء للفرس).", "كلاهما كانتا تابعتين للروم لكن بدرجات متفاوتة.", "كلاهما كانتا مستقلتين تمامًا عن القوى الخارجية."], answer: "الغساسنة (ولاء للروم) - الحيرة (ولاء للفرس).", explanation: "الغساسنة كانوا حلفاء للروم، والحيرة حلفاء للفرس." },
-            { subject: 'تاريخ', question: "10. \"لم تكن أسواق العرب للتجارة فقط\". هذه المقولة تجسد العلاقة الوطيدة بين الاقتصاد والثقافة. أي من المظاهر التالية كان الأكثر ارتباطًا بالأسواق التجارية الكبرى مثل سوق \"ذي المجاز\" و\"مجنة\"؟", options: ["ممارسة الطب وعلاج المرضى بالأعشاب.", "التنافس بين كبار الشعراء والخطباء.", "بناء القصور للملوك والأمراء.", "عقد الأحلاف العسكرية مثل حلف الفضول."], answer: "التنافس بين كبار الشعراء والخطباء.", explanation: "كانت الأسواق ملتقى ثقافيًا بجانب كونها مركزًا تجاريًا." },
-            { subject: 'عربي', question: "1. في الجملتين: \"الطلاب كتبوا الدرس\" و \"يا طلاب، اكتبوا الدرس\". ما علامة بناء الفعلين (كتبوا، اكتبوا) على الترتيب؟", options: ["الضم - حذف النون", "حذف النون - الضم", "الفتح - السكون", "كلاهما مبني على الضم"], answer: "الضم - حذف النون", explanation: "الفعل الماضي \"كتبوا\" مبني على الضم لاتصاله بواو الجماعة، وفعل الأمر \"اكتبوا\" مبني على حذف النون." },
-            { subject: 'عربي', question: "2. في قوله تعالى: \"وَقَضَىٰ رَبُّكَ أَلَّا تَعْبُدُوا إِلَّا إِيَّاهُ\". علامة بناء الفعل الماضي \"قضى\" هي:", options: ["حذف حرف العلة", "الفتح الظاهر", "الفتح المقدر", "السكون"], answer: "الفتح المقدر", explanation: "لأنه فعل ماضٍ معتل الآخر بالألف ولم يتصل به شيء." },
-            { subject: 'عربي', question: "3. \"يا بني، أقمِ الصلاة\". الفعل \"أقم\" هو فعل أمر مبني على:", options: ["حذف حرف العلة لأنه معتل الوسط", "الكسرة الظاهرة", "السكون، وحرك بالكسر منعًا لالتقاء الساكنين", "السكون، وحذف حرف العلة كعلامة بناء"], answer: "السكون، وحرك بالكسر منعًا لالتقاء السaكنين", explanation: "أصل الفعل \"أقمْ\" مبني على السكون، والكسرة عارضة." },
-            { subject: 'عربي', question: "4. \"الطالبات لم يهملنَ واجبهن\". الفعل المضارع \"يهملن\" في الجملة السابقة:", options: ["مجزوم بـ \"لم\" وعلامة جزمه السكون", "مبني على السكون في محل جزم", "مبني على الفتح", "معرب وليس مبنيًا"], answer: "مبني على السكون في محل جزم", explanation: "لاتصاله بنون النسوة، وسبق بأداة الجزم \"لم\"." },
-            { subject: 'عربي', question: "5. \"المؤمن يدعو للخير ويسعى إليه\". علامة إعراب الفعلين \"يدعو\" و \"يسعى\" هي:", options: ["الضمة الظاهرة", "ثبوت النون", "الضمة المقدرة", "الفتحة المقدرة"], answer: "الضمة المقدرة", explanation: "للثقل على الواو في \"يدعو\"، وللتعذر على الألف في \"يسعى\"." },
-            { subject: 'عربي', question: "6. أي جملة من الجمل التالية احتوت على فعل مبني على الفتح؟", options: ["الطلاب فهموا الدرس.", "لقد فهمْتُ الدرس جيدًا.", "والله لأجتهدنَّ في عملي.", "أيتها الفتيات، أَقِمْنَ الصلاة."], answer: "والله لأجتهدنَّ في عملي.", explanation: "فعل مضارع اتصلت به نون التوكيد اتصالًا مباشرًا." },
-            { subject: 'عربي', question: "7. \"علمَنا المعلمُ الكثير\" و \"لقد علمْنا بنجاحك\". ما علامة بناء الفعل \"علم\" في الجملتين على الترتيب؟", options: ["الفتح - السكون", "السكون - الفتح", "كلاهما مبني على الفتح", "كلاهما مبني على السكون"], answer: "الفتح - السكون", explanation: "في الأولى اتصل بـ\"نا\" المفعولين فبني على الفتح، وفي الثانية اتصل بـ\"نا\" الفاعلين فبني على السكون." },
-            { subject: 'عربي', question: "8. في الجملة: \"الخير والشر لا يجتمعان في قلب رجل واحد\". الفعل \"يجتمعان\" هو فعل مضارع:", options: ["مبني على ثبوت النون", "مرفوع وعلامة رفعه الألف لأنه مثنى", "مرفوع وعلامة رفعه الضمة المقدرة", "مرفوع وعلامة رفعه ثبوت النون لأنه من الأفعال الخمسة"], answer: "مرفوع وعلامة رفعه ثبوت النون لأنه من الأفعال الخمسة", explanation: "لأنه من الأفعال الخمسة ولم يسبقه ناصب أو جازم." },
-            { subject: 'عربي', question: "9. \"أيها المصريون، اتحدوا لتحققوا المجد\". علامة بناء الفعل \"اتحدوا\" هي:", options: ["الضم لاتصاله بواو الجماعة", "ثبوت النون", "حذف النون لاتصاله بواو الجماعة", "السكون"], answer: "حذف النون لاتصاله بواو الجماعة", explanation: "لأن مضارعه من الأفعال الخمسة." },
-            { subject: 'عربي', question: "10. أي الأفعال التالية هو الفعل الوحيد المُعرب؟", options: ["اسعَ في الخير.", "نِلْنَ الطالبات الجائزة.", "أنت تسعى في الخير.", "والله لأُكرمنَّ الضيف."], answer: "أنت تسعى في الخير.", explanation: "فعل مضارع لم يتصل به نون النسوة أو نون التوكيد." },
-            { subject: 'فيزياء', question: "1. يقوم طالب بقياس حجم متوازي مستطيلات. قاس الطول فوجده 2.25 \\text{ سم}، والعرض 1.10 \\text{ سم}، والارتفاع 0.50 \\text{ سم}. ما هو حجم المتوازي، معبراً عنه بالعدد الصحيح من الأرقام المعنوية؟", options: ["1.2375 \\text{ سم}^3", "1.238 \\text{ سم}^3", "1.24 \\text{ سم}^3", "1.2 \\text{ سم}^3"], answer: "1.2 \\text{ سم}^3", explanation: "الناتج 1.2375، ولكن يجب تقريبه لأقل عدد من الأرقام المعنوية في القياسات وهو رقمان في الارتفاع 0.50." },
-            { subject: 'فيزياء', question: "2. إذا كانت صيغة تردد البندول البسيط تُعطى بالعلاقة f = \\frac{1}{2\\pi}\\sqrt{\\frac{g}{L}}، حيث f هو التردد، و g هي عجلة الجاذبية الأرضية، و L هو طول البندول. ما هي صيغة أبعاد التردد؟", options: ["[T]", "[T]^{-1}", "[L][T]^{-2}", "[L]^{-1/2}[T]"], answer: "[T]^{-1}", explanation: "التردد هو مقلوب الزمن الدوري، لذا أبعاده T⁻¹." },
-            { subject: 'فيزياء', question: "3. كثافة مادة معينة هي 5.6 \\text{ جم/سم}^3. ما هي كثافتها بوحدة \\text{كجم/م}^3؟", options: ["0.0056 \\text{ كجم/م}^3", "560 \\text{ كجم/م}^3", "5600 \\text{ كجم/م}^3", "56000 \\text{ كجم/م}^3"], answer: "5600 \\text{ كجم/م}^3", explanation: "للتحويل من جم/سم³ إلى كجم/م³، نضرب في 1000." },
-            { subject: 'فيزياء', question: "4. تقطع سيارة مسافة (100 \\pm 2) \\text{ م} في زمن قدره (10 \\pm 0.5) \\text{ ث}. ما هي نسبة الخطأ المئوي في قياس سرعتها؟", options: ["2%", "5%", "7%", "10%"], answer: "7%", explanation: "الخطأ النسبي في السرعة هو مجموع الخطأين النسبيين للمسافة والزمن: (2/100) + (0.5/10) = 0.02 + 0.05 = 0.07. النسبة المئوية = 7%." },
-            { subject: 'فيزياء', question: "5. بالنظر إلى المعادلة v^2 = u^2 + 2as، حيث v و u هما سرعتان، و a هي العجلة، و s هي المسافة. ما هي أبعاد الحد '2as'؟", options: ["[L][T]^{-1}", "[L]^2[T]^{-2}", "[L][T]^{-2}", "[L]^2[T]^{-1}"], answer: "[L]^2[T]^{-2}", explanation: "يجب أن تكون أبعاد جميع حدود المعادلة متماثلة، وأبعاد v² هي [L²T⁻²]." },
-            { subject: 'فيزياء', question: "6. ترتبط كمية فيزيائية x بأربع كميات أخرى a, b, c, و d بالمعادلة x = a^2 \\cdot b^{1/2} / (c \\cdot d^3). إذا كانت نسبة الخطأ المئوي في قياسات a, b, c, و d هي 1%, 2%, 3%, و 4% على التوالي، فما هي نسبة الخطأ المئوي في x؟", options: ["10%", "12%", "16%", "18%"], answer: "18%", explanation: "الخطأ المئوي = 2(1%) + 0.5(2%) + 1(3%) + 3(4%) = 2 + 1 + 3 + 12 = 18%." },
-            { subject: 'فيزياء', question: "7. يبلغ نصف قطر كرة (5.3 \\pm 0.1) \\text{ سم}. ما هي نسبة الخطأ المئوي في حساب حجمها؟ (حجم الكرة = \\frac{4}{3} \\pi r^3)", options: ["1.89%", "3.77%", "5.66%", "7.55%"], answer: "5.66%", explanation: "الخطأ النسبي في الحجم = 3 × الخطأ النسبي في نصف القطر = 3 × (0.1 / 5.3) ≈ 0.0566. النسبة المئوية ≈ 5.66%." },
-            { subject: 'فيزياء', question: "8. تحتوي قدمة ذات ورنية على 20 قسمًا على تدريج الورنية تتطابق مع 19 قسمًا على التدريج الرئيسي. إذا كانت دقة التدريج الرئيسي هي 1 مم، فما هي دقة القدمة ذات الورنية؟", options: ["0.05 مم", "0.1 مم", "0.5 مم", "1 مم"], answer: "0.05 مم", explanation: "دقة القدمة = (1/عدد أقسام الورنية) × دقة التدريج الرئيسي = (1/20) × 1 مم = 0.05 مم." },
-            { subject: 'فيزياء', question: "9. إذا تم اعتبار القوة (F)، والسرعة (V)، والزمن (T) كوحدات أساسية، فما هي صيغة أبعاد الكتلة؟", options: ["[F][V][T]", "[F][V]^{-1}[T]", "[F][V][T]^{-1}", "[F][V]^{-1}[T]^{-1}"], answer: "[F][V]^{-1}[T]", explanation: "من F = ma، فإن M = F/a = F/(V/T) = F V⁻¹ T." },
-            { subject: 'فيزياء', question: "10. يُعطى الزمن الدوري لجسم متذبذب بالعلاقة T = 2\\pi\\sqrt{\\frac{m}{k}}، حيث m هي الكتلة و k هو ثابت القوة. ما هي أبعاد k؟", options: ["[M][L][T]^{-2}", "[M][T]^{-2}", "[M][L][T]^{-1}", "[M][L]^{-1}[T]^{-2}"], answer: "[M][T]^{-2}", explanation: "من العلاقة، k = 4π²m / T²، فتكون أبعادها [M]/[T²]." },
-            { subject: 'فيزياء', question: "11. تسافر سيارة من النقطة A إلى النقطة B بسرعة ثابتة قدرها 40 \\text{ كم/ساعة} وتعود من B إلى A بسرعة ثابتة قدرها 60 \\text{ كم/ساعة}. ما هي السرعة العددية المتوسطة للسيارة للرحلة بأكملها؟", options: ["0 \\text{ كم/ساعة}", "48 \\text{ كم/ساعة}", "50 \\text{ كم/ساعة}", "100 \\text{ كم/ساعة}"], answer: "48 \\text{ كم/ساعة}", explanation: "السرعة المتوسطة = 2v₁v₂ / (v₁+v₂) = 2(40)(60) / (40+60) = 4800 / 100 = 48." },
-            { subject: 'فيزياء', question: "12. يبدأ جسيم حركته من السكون ويتسارع بمعدل 2 \\text{ م/ث}^2 لمدة 10 ثوانٍ. ثم يتحرك بسرعة ثابتة لمدة 30 ثانية وأخيرًا يتباطأ بمعدل 4 \\text{ م/ث}^2 حتى يتوقف. ما هي المسافة الكلية المقطوعة؟", options: ["750 م", "800 م", "850 م", "900 م"], answer: "750 م", explanation: "المسافة الأولى = ½(2)(10)² = 100م. السرعة النهائية = 2(10) = 20م/ث. المسافة الثانية = 20×30 = 600م. المسافة الثالثة = (0² - 20²)/(2×-4) = 50م. المجموع = 750م." },
-            { subject: 'فيزياء', question: "13. قُذفت كرة رأسيًا لأعلى بسرعة 20 \\text{ م/ث}. ما هو الزمن المستغرق لتصل إلى أقصى ارتفاع لها؟ (اعتبر g = 10 \\text{ م/ث}^2)", options: ["1 ث", "2 ث", "3 ث", "4 ث"], answer: "2 ث", explanation: "عند أقصى ارتفاع v=0. باستخدام v = u - gt، فإن t = u/g = 20/10 = 2 ث." },
-            { subject: 'فيزياء', question: "14. يُعطى موضع جسيم يتحرك على طول المحور السيني بالمعادلة x = 3t^2 - t^3، حيث x بالأمتار و t بالثواني. عند أي زمن ستكون سرعة الجسيم صفرًا؟", options: ["0 ث", "1 ث", "2 ث", "3 ث"], answer: "2 ث", explanation: "السرعة v = dx/dt = 6t - 3t². بوضع v=0، فإن 3t(2-t)=0، إذن t=0 أو t=2." },
-            { subject: 'فيزياء', question: "15. قطار طوله 150 مترًا يسير بسرعة 90 \\text{ كم/ساعة}. ما هو الزمن الذي يستغرقه القطار لعبور جسر طوله 850 مترًا؟", options: ["30 ث", "40 ث", "50 ث", "60 ث"], answer: "40 ث", explanation: "المسافة الكلية = 150+850 = 1000م. السرعة = 90 كم/س = 25 م/ث. الزمن = 1000/25 = 40 ث." },
-            { subject: 'فيزياء', question: "16. أُسقط جسم من ارتفاع 80 مترًا. ما هي سرعته لحظة اصطدامه بالأرض؟ (اعتبر g = 10 \\text{ م/ث}^2)", options: ["20 \\text{ م/ث}", "30 \\text{ م/ث}", "40 \\text{ م/ث}", "50 \\text{ م/ث}"], answer: "40 \\text{ م/ث}", explanation: "باستخدام v² = u² + 2gh، فإن v² = 0 + 2(10)(80) = 1600. إذن v = 40 م/ث." },
-            { subject: 'فيزياء', question: "17. تتسارع سيارة من السكون بمعدل ثابت α لبعض الوقت، ثم تتباطأ بمعدل ثابت β لتتوقف. إذا كان الزمن الكلي المستغرق هو t، فما هي أقصى سرعة وصلت إليها السيارة؟", options: ["(\\frac{\\alpha\\beta}{\\alpha+\\beta})t", "(\\frac{\\alpha+\\beta}{\\alpha\\beta})t", "(\\frac{\\alpha^2}{\\alpha+\\beta})t", "(\\frac{\\beta^2}{\\alpha+\\beta})t"], answer: "(\\frac{\\alpha\\beta}{\\alpha+\\beta})t", explanation: "من العلاقات v_max=αt₁ و v_max=βt₂ و t=t₁+t₂، بالتعويض نصل إلى الحل." },
-            { subject: 'فيزياء', question: "18. تُعطى سرعة جسيم بالمعادلة v = 2t^2 - 4t + 3. أوجد عجلة الجسيم عند الزمن t = 2 ثانية.", options: ["2 \\text{ م/ث}^2", "4 \\text{ م/ث}^2", "6 \\text{ م/ث}^2", "8 \\text{ م/ث}^2"], answer: "4 \\text{ م/ث}^2", explanation: "العجلة a = dv/dt = 4t - 4. عند t=2، فإن a = 4(2)-4 = 4 م/ث²." },
-            { subject: 'فيزياء', question: "19. يبدأ جسم حركته من السكون ويتحرك بعجلة منتظمة. نسبة المسافة المقطوعة في الثانية النونية (nth) إلى المسافة المقطوعة في n ثانية هي:", options: ["\\frac{2}{n} - \\frac{1}{n^2}", "\\frac{1}{n^2} - \\frac{1}{n}", "\\frac{2}{n^2} - \\frac{1}{n}", "\\frac{2}{n} + \\frac{1}{n^2}"], answer: "\\frac{2}{n} - \\frac{1}{n^2}", explanation: "المسافة في الثانية النونية S_nth = a(n-½). المسافة في n ثانية S_n = ½an². النسبة هي a(n-½)/(½an²) = (2n-1)/n² = 2/n - 1/n²." },
-            { subject: 'فيزياء', question: "20. أُسقط حجر في بئر. سُمع صوت ارتطامه بالماء بعد 4.23 ثانية. إذا كانت سرعة الصوت 340 \\text{ م/ث}، فما هو عمق البئر؟ (اعتبر g = 9.8 \\text{ م/ث}^2)", options: ["70.8 م", "74.8 م", "78.8 م", "82.8 م"], answer: "78.8 م", explanation: "بحل المعادلة h/340 + √(2h/9.8) = 4.23، نجد أن أقرب قيمة هي 78.8 م." }
+            { level: 'سهل', question: "1. ما هي الحضارة التي اتخذت من مدينة \"قرناو\" عاصمة لها؟", options: ["حضارة سبأ", "حضارة حمير", "حضارة معين", "الحضارة المصرية"], answer: "حضارة معين", explanation: "كانت مدينة \"قرناو\" هي عاصمة مملكة معين التي قامت في منطقة الجوف الخصبة." },
+            { level: 'سهل', question: "2. أي منشأة هندسية عظيمة تُنسب إلى حضارة سبأ؟", options: ["الأهرامات", "سد مأرب", "حدائق بابل المعلقة", "سور الصين العظيم"], answer: "سد مأرب", explanation: "يُعد سد مأرب من أعظم إنجازات مملكة سبأ الهندسية، وساهم في ازدهار الزراعة بشكل كبير." },
+            { level: 'سهل', question: "3. ما اسم الأبجدية التي استخدمها اليمنيون القدماء في كتاباتهم؟", options: ["الهيروغليفية", "المسمارية", "الخط المسند", "الفينيقية"], answer: "الخط المسند", explanation: "هي الأبجدية التي ابتكرها واستخدمها أهل اليمن القديم في نقوشهم وكتاباتهم." },
+            { level: 'سهل', question: "4. مَن هي الملكة الشهيرة التي حكمت مملكة سبأ وعاصرت النبي سليمان؟", options: ["حتشبسوت", "بلقيس", "نفرتيتي", "كليوباترا"], answer: "بلقيس", explanation: "الملكة بلقيس هي أشهر حكام مملكة سبأ، وقد ورد ذكر قصتها مع نبي الله سليمان في القرآن الكريم." },
+            { level: 'سهل', question: "5. أي نشاط اقتصادي كان يُعد النشاط الرئيسي في بلاد اليمن القديم؟", options: ["الصناعة", "الزراعة", "التجارة", "الرعي"], answer: "التجارة", explanation: "بسبب موقع اليمن الاستراتيجي على طرق التجارة العالمية القديمة، كانت التجارة هي عصب اقتصادها ومصدر ثروتها الرئيسي." },
+            { level: 'سهل', question: "6. ما هو العامل الجغرافي الرئيسي الذي ساهم في ازدهار حضارات اليمن؟", options: ["كثرة الأنهار", "الموقع على طرق التجارة", "وجود الصحاري الشاسعة", "الغابات الكثيفة"], answer: "الموقع على طرق التجارة", explanation: "تحكم اليمن في طرق التجارة البرية والبحرية (خاصة طريق البخور) كان العامل الأهم في ازدهارها وتواصلها مع الحضارات الأخرى." },
+            { level: 'سهل', question: "7. ما هي المدينة التي أصبحت عاصمة لمملكة حمير؟", options: ["صنعاء", "عدن", "قرناو", "ريدان (ظفار)"], answer: "ريدان (ظفار)", explanation: "بعد سيطرتهم على مناطق سبأ، نقل الحميريون عاصمتهم إلى مدينة \"ريدان\" التي تعرف اليوم باسم \"ظفار\"." },
+            { level: 'سهل', question: "8. ما هي المادة التي كانت تستوردها حضارة معين من مصر القديمة؟", options: ["البخور", "الكتان والذهب", "التوابل", "الخشب"], answer: "الكتان والذهب", explanation: "دلت النقوش الأثرية على وجود تبادل تجاري، حيث كانت اليمن تصدّر البخور وتستورد من مصر الكتان لصناعة الملابس والذهب للزينة." },
+            { level: 'سهل', question: "9. أي مملكة يمنية تميزت بتوسعها العسكري الكبير؟", options: ["معين", "سبأ", "حمير", "قتبان"], answer: "حمير", explanation: "تميزت مملكة حمير بقوتها العسكرية وتوسعاتها الكبيرة التي شملت معظم مناطق اليمن القديم." },
+            { level: 'سهل', question: "10. ماذا كان المعتقد الديني السائد في حضارات اليمن قبل ظهور الديانات السماوية؟", options: ["عبادة الأصنام الحجرية", "عبادة الحيوانات", "عبادة النجوم والكواكب", "عبادة النار"], answer: "عبادة النجوم والكواكب", explanation: "كانت عبادة الأجرام السماوية هي الديانة السائدة، وهو ما يفسر براعتهم في علم الفلك." },
+            { level: 'متوسط', question: "11. ما السبب المباشر الذي أدى إلى غزو الأحباش لمملكة حمير؟", options: ["الرغبة في السيطرة على التجارة", "انهيار سد مأرب", "اضطهاد الملك ذونواس للمسيحيين", "طلب من الفرس"], answer: "اضطهاد الملك ذونواس للمسيحيين", explanation: "أدى هذا الاضطهاد الديني إلى تدخل ملك الحبشة (مملكة أكسوم) المسيحي عسكريًا لنجدة مسيحيي اليمن." },
+            { level: 'متوسط', question: "12. كيف تكيّف اليمنيون القدماء مع طبيعة أراضيهم الجبلية للزراعة؟", options: ["باستخدام الآلات الزراعية الحديثة", "ببناء المدرجات الجبلية", "بزراعة المحاصيل الصحراوية فقط", "بجلب التربة من مناطق أخرى"], answer: "ببناء المدرجات الجبلية", explanation: "أبدع اليمنيون في تحويل سفوح الجبال إلى مساحات زراعية خصبة عبر بناء المدرجات، وهو حل هندسي عبقري للتغلب على طبيعة الأرض." },
+            { level: 'متوسط', question: "13. أي من الحضارات التالية لم تكن على تواصل جغرافي مباشر مع طرق تجارة اليمن القديم؟", options: ["الحضارة المصرية", "حضارة الهند", "حضارات شرق إفريقيا (أكسوم)", "حضارة المايا في أمريكا الوسطى"], answer: "حضارة المايا في أمريكا الوسطى", explanation: "كانت حضارة المايا في قارة أخرى (الأمريكتين) ولم يكن هناك أي تواصل معروف بينها وبين حضارات العالم القديم في تلك الفترة." },
+            { level: 'متوسط', question: "14. ما الدور الذي لعبه \"مجلس عام\" في نظام الحكم الملكي اليمني القديم؟", options: ["انتخاب الملك", "إدارة الشؤون الدينية فقط", "مساعدة الملك في إدارة الدولة", "قيادة الجيش في الحروب"], answer: "مساعدة الملك في إدارة الدولة", explanation: "كان \"المجلس العام\" بمثابة هيئة استشارية وحكومية تساعد الملك الوراثي في إدارة شؤون المملكة." },
+            { level: 'متوسط', question: "15. يدل وصول الملكة بلقيس إلى حكم سبأ على...", options: ["ضعف الرجال في المجتمع السبئي", "أن نظام الحكم كان ديمقراطيًا", "المكانة المرموقة التي حظيت بها المرأة", "أنها كانت آخر حكام سبأ"], answer: "المكانة المرموقة التي حظيت بها المرأة", explanation: "إن وصول امرأة إلى أعلى منصب في الدولة (ملكة) هو دليل قاطع على أن المرأة كانت تتمتع بحقوق ومكانة اجتماعية وسياسية عالية." },
+            { level: 'متوسط', question: "16. ما النتيجتان المترتبتان على انهيار سد مأرب؟", options: ["ازدهار الزراعة وهجرة السكان", "تدهور الزراعة وضعف مملكة سبأ", "تقوية مملكة سبأ وغزو حمير", "بناء سد جديد وتوسع التجارة"], answer: "تدهور الزراعة وضعف مملكة سبأ", explanation: "كان السد هو أساس الزراعة المزدهرة، وانهياره أدى إلى كارثة زراعية واقتصادية أدت بدورها إلى إضعاف المملكة وانهيارها لاحقًا." },
+            { level: 'متوسط', question: "17. لماذا برع اليمنيون القدماء في علم الفلك؟", options: ["للتنبؤ بالمستقبل وقراءة الطالع فقط", "لأسباب دينية مرتبطة بعبادة الأجرام السماوية", "لمساعدتهم في الزراعة والملاحة البحرية", "لمنافسة الحضارة المصرية في هذا المجال"], answer: "لمساعدتهم في الزراعة والملاحة البحرية", explanation: "استخدموا الفلك لتحديد مواسم الزراعة بدقة (التقويم السبئي)، ولتوجيه سفنهم التجارية في البحار والمحيطات." },
+            { level: 'متوسط', question: "18. ما هو الدور الذي لعبه \"سيف بن ذي يزن\" في تاريخ اليمن؟", options: ["بناء سد مأرب", "توحيد ممالك اليمن لأول مرة", "طلب المساعدة من الفرس لطرد الأحباش", "نشر المسيحية في حمير"], answer: "طلب المساعدة من الفرس لطرد الأحباش", explanation: "بعد فترة من الحكم الحبشي، قاد الأمير الحميري سيف بن ذي يزن المقاومة واستعان بالإمبراطورية الفارسية لطرد الأحباش من اليمن." },
+            { level: 'متوسط', question: "19. ما الذي يمكن استنتاجه من وجود قوانين منظمة للضرائب والميراث في حضارة معين؟", options: ["أن المجتمع كان بدائيًا", "وجود نظام دولة متطور ومؤسسات راسخة", "أن التجارة كانت غير مهمة", "أن المجتمع كان يعاني من الفوضى"], answer: "وجود نظام دولة متطور ومؤسسات راسخة", explanation: "إن وجود قوانين تنظم جوانب دقيقة مثل الضرائب والميراث والمعاملات التجارية يدل على وجود جهاز إداري وقضائي متطور، وهي من سمات الدول المتقدمة." },
+            { level: 'متوسط', question: "20. ما العامل المشترك بين ضعف مملكة سبأ وسقوط مملكة حمير؟", options: ["الكوارث الطبيعية", "التدخلات العسكرية الخارجية", "الأهمية الاستراتيجية لليمن", "الصراعات الدينية الداخلية"], answer: "الأهمية الاستراتيجية لليمن", explanation: "موقع اليمن الهام أثر على تجارتها (مما أدى لضعف سبأ عند تغير الطرق التجارية)، وجعلها مطمعًا للقوى الخارجية (مما أدى لسقوط حمير بالغزو)." },
+            { level: 'صعب', question: "21. أي من العبارات التالية تصف العلاقة بين مملكة حمير وسبأ بشكل أدق؟", options: ["كانتا مملكتين متحالفتين دائمًا", "حمير هي امتداد وتطور لحضارة سبأ", "لم تكن هناك أي علاقة بينهما", "سبأ هي التي قضت على مملكة حمير"], answer: "حمير هي امتداد وتطور لحضارة سبأ", explanation: "الحميريون كانوا فرعًا من السبئيين، وقامت دولتهم على أنقاض مملكة سبأ وورثت الكثير من ملامحها الحضارية، لذا هي تمثل استمرارية وتطورًا لها." },
+            { level: 'صعب', question: "22. استخدام اليمنيين لحركة النجوم في الملاحة يدل على وجود تكامل بين...", options: ["العلم والاقتصاد", "الدين والسياسة", "الفن والعمارة", "الزراعة والصناعة"], answer: "العلم والاقتصاد", explanation: "هذا يمثل تطبيقًا عمليًا للمعرفة العلمية (علم الفلك) لخدمة الهدف الاقتصادي الأسمى للدولة وهو التجارة البحرية." },
+            { level: 'صعب', question: "23. ما الذي يمثله \"طريق البخور\" بالنسبة لحضارات اليمن القديم؟", options: ["طريق للحج الديني", "مصدر ثانوي للدخل", "شريان اقتصادي عالمي سيطروا عليه", "حدود عسكرية تفصلهم عن الأعداء"], answer: "شريان اقتصادي عالمي سيطروا عليه", explanation: "لم يكن مجرد طريق تجاري، بل كان المصدر الأهم للسلع الفاخرة في العالم القديم، وسيطرة اليمن عليه منحتها نفوذًا وثروة هائلة." },
+            { level: 'صعب', question: "24. ما هو الأثر الحضاري الأبعد مدى للأبجدية التي ابتكرها اليمنيون (الخط المسند)؟", options: ["أصبحت أساسًا للأبجدية الأوروبية الحديثة", "ساهمت في تطور الكتابة العربية لاحقًا", "استخدمت لتدوين ملحمة جلجامش", "لم يكن لها أي أثر خارج اليمن"], answer: "ساهمت في تطور الكتابة العربية لاحقًا", explanation: "يرى علماء اللغات أن الخط المسند هو أحد الجذور الرئيسية التي تطورت عنها الأبجدية العربية، مما يجعله ذا أثر بعيد المدى ومستمر." },
+            { level: 'صعب', question: "25. يعكس تعاقب الغزو الحبشي ثم الفارسي على اليمن في نهاية تاريخها القديم...", options: ["قوة اليمن العسكرية وقدرتها على الصمود", "انعزال اليمن عن الصراعات العالمية", "وقوعها ضحية للصراع بين القوى الإقليمية الكبرى", "ازدهارها الاقتصادي في تلك الفترة"], answer: "وقوعها ضحية للصراع بين القوى الإقليمية الكبرى", explanation: "في تلك الفترة، كان هناك صراع كبير بين الإمبراطورية البيزنطية (التي دعمت الأحباش) والإمبراطورية الفارسية الساسانية. وبسبب موقعها الهام، أصبحت اليمن ساحة لهذا الصراع العالمي." }
         ];
-        
+
+        // DOM Elements
         const quizSetupEl = document.getElementById('quiz-setup');
         const quizLiveContentEl = document.getElementById('quiz-live-content');
         const studentNameInput = document.getElementById('student-name');
@@ -241,8 +208,6 @@
         const submitBtn = document.getElementById('submit-btn');
         const timerEl = document.getElementById('timer');
         const resultsEl = document.getElementById('results');
-        let timerInterval;
-
         const chatbotToggle = document.getElementById('chatbot-toggle');
         const chatbotWindow = document.getElementById('chatbot-window');
         const chatbotClose = document.getElementById('chatbot-close');
@@ -250,19 +215,20 @@
         const userInput = document.getElementById('user-input');
         const messagesContainer = document.getElementById('chatbot-messages');
         const chatbotTitle = document.getElementById('chatbot-title');
+        
+        // State variables
+        let timerInterval;
         let chatUses = 0;
-        const MAX_USES = 5;
+        const MAX_USES = 3;
 
         function startTimer(duration) {
             let timer = duration;
             timerInterval = setInterval(() => {
-                let hours = Math.floor(timer / 3600);
-                let minutes = Math.floor((timer % 3600) / 60);
+                let minutes = Math.floor(timer / 60);
                 let seconds = Math.floor(timer % 60);
-                hours = hours < 10 ? "0" + hours : hours;
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
-                timerEl.textContent = `${hours}:${minutes}:${seconds}`;
+                timerEl.textContent = `00:${minutes}:${seconds}`;
                 if (--timer < 0) {
                     clearInterval(timerInterval);
                     alert("انتهى الوقت! سيتم تسليم إجاباتك الآن.");
@@ -278,14 +244,13 @@
             fullQuizData.forEach((current, index) => {
                 const optionsHTML = current.options.map((option, optIndex) => {
                     const optionId = `q${index}o${optIndex}`;
-                    return `<li><input type="radio" name="question${index}" id="${optionId}" value="${option}"><label for="${optionId}">${option.replace(/\\text/g, '').replace(/\{/g, '').replace(/\}/g, '').replace(/\\/g, '')}</label></li>`;
+                    return `<li><input type="radio" name="question${index}" id="${optionId}" value="${option}"><label for="${optionId}">${option}</label></li>`;
                 }).join('');
-                const imagePrompt = encodeURIComponent(`Digital Illustration, Cinematic, Epic High-Fantasy, dramatic lighting, deep reds and oranges, dark moody tones, sharp 2D art style of: ${current.subject} concept related to: ${current.question.substring(3, 80)}`);
+                
                 allQuestionsHTML += `
-                    <div class="question-block" data-index="${index}">
-                        <span class="subject-tag">${current.subject}</span>
-                        <img src="https://image.pollinations.ai/prompt/${imagePrompt}?width=900&height=250&seed=${Math.random()}" alt="صورة فنية للسؤال">
-                        <p class="question-text">${current.question.replace(/\\text/g, '').replace(/\{/g, '').replace(/\}/g, '').replace(/\\/g, '')}</p>
+                    <div class="question-block">
+                        <span class="level-tag">المستوى: ${current.level}</span>
+                        <p class="question-text">${current.question}</p>
                         <ul class="options">${optionsHTML}</ul>
                     </div>`;
             });
@@ -311,7 +276,7 @@
             quizLiveContentEl.style.display = 'block';
             chatbotToggle.style.display = 'flex';
             buildQuiz();
-            startTimer(240 * 60);
+            startTimer(45 * 60); // 45 minutes
         }
 
         function showResults() {
@@ -336,15 +301,15 @@
                 <p id="final-score">الدرجة النهائية: ${score} من ${fullQuizData.length}</p>
                 <h3>مراجعة الإجابات:</h3>`;
             
-            fullQuizData.forEach((current, index) => {
+            fullQuizData.forEach((current) => {
                 const userAnswerObj = studentAnswers.find(ans => ans.question === current.question);
-                const userAnswer = userAnswerObj ? userAnswerObj.selected : "لم تتم الإجابة";
+                const userAnswer = userAnswerObj ? userAnswerObj.selected : undefined;
                 const isCorrect = userAnswer === current.answer;
                 resultsHTML += `
                     <div class="review-question ${isCorrect ? 'correct' : 'incorrect'}">
-                        <p><strong>السؤال:</strong> ${current.question.replace(/\\text/g, '').replace(/\{/g, '').replace(/\}/g, '').replace(/\\/g, '')}</p>
-                        <p><strong>إجابتك:</strong> ${userAnswer ? userAnswer.replace(/\\text/g, '').replace(/\{/g, '').replace(/\}/g, '').replace(/\\/g, '') : "<em>لم تتم الإجابة</em>"}</p>
-                        ${!isCorrect ? `<p><strong>الإجابة الصحيحة:</strong> ${current.answer.replace(/\\text/g, '').replace(/\{/g, '').replace(/\}/g, '').replace(/\\/g, '')}</p>` : ''}
+                        <p><strong>السؤال:</strong> ${current.question}</p>
+                        <p><strong>إجابتك:</strong> ${userAnswer || "<em>لم تتم الإجابة</em>"}</p>
+                        ${!isCorrect ? `<p><strong>الإجابة الصحيحة:</strong> ${current.answer}</p>` : ''}
                         <div class="explanation"><strong>الشرح:</strong> ${current.explanation}</div>
                     </div>`;
             });
@@ -374,12 +339,12 @@
                 return;
             }
 
-            const foundQuestion = fullQuizData.find(q => userText.includes(q.question.substring(3, 60).replace(/\\/g, '')));
+            const foundQuestion = fullQuizData.find(q => userText.includes(q.question.substring(3, 60)));
             
             if (foundQuestion) {
                 chatUses++;
                 const remaining = MAX_USES - chatUses;
-                const botResponse = `الإجابة الصحيحة هي: "${foundQuestion.answer.replace(/\\/g, '')}".\nالشرح: ${foundQuestion.explanation}\n\nتبقى لديك ${remaining} محاولات مساعدة.`;
+                const botResponse = `الإجابة الصحيحة هي: "${foundQuestion.answer}".\nالشرح: ${foundQuestion.explanation}\n\nتبقى لديك ${remaining} محاولات مساعدة.`;
                 addMessage(botResponse, 'bot');
             } else {
                 addMessage("لم أتعرف على هذا السؤال. الرجاء نسخ ولصق السؤال بالكامل من الامتحان.", 'bot');
@@ -388,7 +353,7 @@
             if (chatUses >= MAX_USES) { chatbotTitle.textContent = `"موكوس" خارج الخدمة`; }
         }
 
-        startBtn.addEventListener('click', startExam);
+               startBtn.addEventListener('click', startExam);
         submitBtn.addEventListener('click', () => {
             const confirmSubmit = confirm("هل أنت متأكد من رغبتك في تسليم الامتحان؟ لا يمكنك العودة بعد ذلك.");
             if (confirmSubmit) { showResults(); }
@@ -400,7 +365,84 @@
         userInput.addEventListener('keydown', e => {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleUserInput(); }
         });
-     </script>
+
+        // New Background Animation Script
+        const canvas = document.getElementById('background-animation');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y; this.directionX = directionX;
+                this.directionY = directionY; this.size = size; this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = 'rgba(0, 229, 255, 0.1)';
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) { this.directionX = -this.directionX; }
+                if (this.y > canvas.height || this.y < 0) { this.directionY = -this.directionY; }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 5) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                particlesArray.push(new Particle(x, y, directionX, directionY, size));
+            }
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${opacityValue})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0,0,innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+        
+        window.addEventListener('resize', () => {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            init();
+        });
+        
+        init();
+        animate();
+    </script>
 </body>
 </html>
-            
